@@ -1,0 +1,24 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {JSDOM}=require(process.env.COFFEE_TEST_JSDOM||'jsdom');
+const root=path.join(__dirname,'..','dist');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+const w=new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'),{url:'https://coffee.test',runScripts:'outside-only'}).window;
+w.structuredClone=structuredClone;w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'))};
+let change,session=null,cloud=null,conflict=false,saves=0;
+const db={auth:{onAuthStateChange(fn){change=fn},async getSession(){return{data:{session}}},async signInWithPassword(){session={user:{id:'account-a'}};return{data:{session}}},async signOut(){session=null;change('SIGNED_OUT',null);return{}}},from(){return{select(){return this},eq(){return this},async maybeSingle(){return{data:cloud}}}},async rpc(_name,args){saves++;if(conflict)return{error:{code:'40001',message:'COFFEE_CONFLICT'}};cloud={recipes:args.new_recipes,revision:(cloud?.revision||0)+1};return{data:cloud.revision}}};
+w.CoffeeSupabase={createClient(){return db}};w.COFFEE_CONFIG={url:'https://test.supabase.co',key:'sb_publishable_test'};
+w.eval(['app.js','enhancements.js','cloud.js'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n'));
+const $=s=>w.document.querySelector(s);
+await wait(10);$('#authEmail').value='test@example.com';$('#authPassword').value='example-password';$('#authForm').dispatchEvent(new w.Event('submit',{cancelable:true}));await wait(10);
+assert.equal($('#signedActions').hidden,false);
+$('#addRecipeTop').click();$('#name').value='Cloud latte';$('#category').value='นม';$('#serve').value='เย็น';$('.step-text').value='ชง';$('#recipeForm').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await wait(950);
+assert.equal(cloud.recipes[0].name,'Cloud latte');assert.equal($('#syncState').textContent,'บันทึกออนไลน์แล้ว ✓');
+assert.equal(w.localStorage.getItem('slow-steady-recipes-v1'),null);
+conflict=true;$('.recipe-card').click();$('[data-edit]').click();$('#name').value='Local conflicting edit';$('#recipeForm').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await wait(950);
+assert.equal($('.cloud-bar').dataset.state,'conflict');assert.equal(cloud.recipes[0].name,'Cloud latte');assert.equal(JSON.parse(w.localStorage.getItem('coffee-cloud-account-a')).dirty,true);
+const before=saves;await wait(900);assert.equal(saves,before,'Conflict must not retry overwrite');
+change('SIGNED_IN',{user:{id:'account-b'}});cloud={recipes:[],revision:1};await wait(20);
+assert.equal(w.document.querySelectorAll('.recipe-card').length,0,'New account must not see account A recipes');
+console.log('PASS: cloud save, legacy isolation, revision conflict, no overwrite loop, account switching');w.close();
+})().catch(e=>{console.error(e);process.exit(1)});

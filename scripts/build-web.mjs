@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import {mkdir,writeFile} from 'node:fs/promises';
+await mkdir('dist/vendor',{recursive:true});
+await build({entryPoints:['@supabase/supabase-js'],bundle:true,format:'iife',globalName:'CoffeeSupabase',outfile:'dist/vendor/supabase.js',platform:'browser',minify:true,target:'es2022'});
+const url=process.env.SUPABASE_URL||'';
+const key=process.env.SUPABASE_PUBLISHABLE_KEY||'';
+if(!url||!key)throw Error('Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY before building. Never use service_role keys.');
+if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)||!key.startsWith('sb_publishable_'))throw Error('Expected Supabase project URL and public publishable key');
+await writeFile('dist/cloud-config.js',`window.COFFEE_CONFIG=${JSON.stringify({url,key})};\n`);
+console.log('Web assets and public configuration ready');

@@ -1,0 +1,9 @@
+{
+  "name": "Slow & Steady Coffee Recipes",
+  "short_name": "Coffee Recipes",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3ead5",
+  "theme_color": "#56594c",
+  "icons": []
+}

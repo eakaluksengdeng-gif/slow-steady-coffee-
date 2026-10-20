@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+.vercel/
+dist/cloud-config.js
+dist/vendor/
+releases/
+site-package.tar.gz
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties

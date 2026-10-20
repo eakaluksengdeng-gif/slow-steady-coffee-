@@ -1,0 +1,71 @@
+/* Coffee Club — cream paper, ink outlines, offset shadows. */
+:root{--paper:#fff3e9;--ink:#21211f;--olive:#ffe100;--gold:#21211f;--line:#35352f;--soft:#fff9f2;--danger:#ac302b;--yellow:#ffe100;--cyan:#75d2df;--lime:#e4f462;--shadow:4px 5px 0 #21211f}
+html{background:#ffd126}
+body{font-family:ui-rounded,"Thonburi","Noto Sans Thai",system-ui,sans-serif;background-color:#ffd126;background-image:radial-gradient(#726b44 1px,transparent 1px);background-size:18px 18px}
+.paper-noise{display:none}
+.app-shell{background:var(--paper);box-shadow:6px 7px 0 var(--ink);border:2px solid var(--ink);border-radius:28px;min-height:calc(100dvh - 36px);margin:18px auto;padding-top:25px;padding-bottom:125px}
+.topbar{gap:12px;padding-bottom:19px;margin-bottom:18px;border-bottom:2px solid var(--ink);align-items:center}
+.eyebrow{font:700 10px/1.5 system-ui,sans-serif;letter-spacing:.14em;color:var(--ink)}
+.topbar h1{font:750 26px/1.3 ui-rounded,system-ui,sans-serif;letter-spacing:-1px}
+.brand-note{display:table;font-size:12px;line-height:1.6;letter-spacing:0;font-weight:500;background:var(--lime);padding:0 7px;margin-top:7px;border-radius:5px;transform:rotate(-1deg)}
+.round-button{flex-shrink:0;background:var(--cyan);border:2px solid var(--ink);box-shadow:2px 3px 0 var(--ink);font-weight:700}
+#addRecipeTop{background:var(--yellow);width:48px;height:48px;font-size:30px}
+.search-wrap{border:2px solid var(--ink);border-radius:9px;background:var(--soft);height:48px}
+.search-wrap span{font-weight:750;color:var(--ink)}
+.search-wrap input{font-family:inherit;font-size:15px}
+.chips{padding:15px 2px 18px;gap:9px}
+.chips button{border:1.5px solid var(--ink);font-size:12px;font-weight:650;border-radius:5px;padding:8px 12px;background:var(--paper);min-height:40px}
+.chips button.active{background:var(--yellow);color:var(--ink);border-color:var(--ink);box-shadow:2px 3px 0 var(--ink)}
+.signature{position:relative;background:var(--lime);color:var(--ink);border:2px solid var(--ink);border-radius:10px;box-shadow:4px 5px 0 var(--ink);padding:20px 16px;gap:10px;min-height:145px}
+.signature small{color:var(--ink);font-size:10px;font-weight:750;letter-spacing:.08em}
+.signature h2{font:750 25px/1.3 ui-rounded,system-ui,sans-serif;margin:8px 0 5px;overflow-wrap:anywhere}
+.signature p{font-size:13px;opacity:1}
+.signature button{background:var(--yellow);color:var(--ink);border:2px solid var(--ink);border-radius:7px;box-shadow:2px 3px 0 var(--ink);font-weight:750;min-height:45px;white-space:nowrap}
+.section-head{margin-top:30px;margin-bottom:13px}
+.section-head h2,.page-title{font:750 22px/1.4 ui-rounded,system-ui,sans-serif}
+.section-head span{color:var(--ink);background:var(--cyan);border:1.5px solid var(--ink);padding:3px 8px;border-radius:5px;font-weight:650}
+.recipe-list{display:grid;gap:12px}
+.recipe-card{background:var(--soft);border:2px solid var(--ink);border-radius:9px;box-shadow:3px 4px 0 var(--ink);padding:15px 12px;min-height:88px;transition:transform .12s,box-shadow .12s}
+.recipe-card strong{font-size:16px;font-weight:750;overflow-wrap:anywhere}
+.recipe-card small{font-size:12px;color:#565650;line-height:1.7}
+.recipe-icon{color:var(--ink);border:1.5px solid var(--ink);background:var(--paper);font-size:22px}
+.recipe-card .arrow{color:var(--ink);font-weight:750}
+.bottom-nav{width:min(500px,calc(100% - 32px));bottom:calc(16px + env(safe-area-inset-bottom));border:2px solid var(--ink);border-radius:999px;background:var(--paper);box-shadow:3px 4px 0 var(--ink);padding:8px 12px;backdrop-filter:none}
+.nav-item{color:var(--ink);opacity:1;min-height:45px;border-radius:999px;padding:3px 16px}
+.nav-item.active{color:var(--ink);background:var(--yellow);transform:rotate(-2deg)}
+.nav-item small{font-size:11px;font-weight:700}.nav-item span{font-size:20px;font-weight:750}
+.tools-row{margin-top:24px;gap:12px;justify-content:space-between}.tools-row span{font-size:11px;color:#55554f}
+.outline-button{border:2px solid var(--ink);border-radius:7px;background:var(--cyan);box-shadow:2px 3px 0 var(--ink);font-weight:650;padding:12px}
+.sheet,.brew-dialog{background:var(--paper);border:2px solid var(--ink)}
+.sheet{border-radius:24px 24px 0 0}.sheet-head{background:var(--lime);border-bottom:2px solid var(--ink)}
+.sheet-head h2{font-weight:750}.text-button.accent{color:var(--ink);font-weight:750}
+.sheet-body h3,.detail-body h3{font-size:17px;font-weight:750;padding-top:10px}
+.sheet-body input,.sheet-body select,.sheet-body textarea,.variant-select select{border:1.5px solid var(--ink);border-radius:6px;background:var(--soft);font-family:inherit}
+.sheet-body label{font-weight:600}.help{color:#565650;font-weight:400}
+.ingredient-editor,.variant-row{border:2px solid var(--ink);border-radius:9px;background:var(--soft)}
+.delete-button{border:2px solid var(--danger);border-radius:7px;background:#ffe2dc;font-weight:650}
+.detail-hero h2{font:750 28px/1.4 ui-rounded,system-ui,sans-serif}.detail-hero p{color:#565650}
+.detail-icon{border:2px solid var(--ink);background:var(--yellow);box-shadow:3px 3px 0 var(--ink)}
+.spec-grid{gap:12px}.spec{border:2px solid var(--ink);border-radius:8px;background:var(--soft);box-shadow:2px 3px 0 var(--ink)}
+.spec small{color:#565650;font-size:12px}.spec strong{margin-top:5px;font-size:18px}.spec:nth-child(2){background:var(--cyan)}
+.ingredients li{border-bottom:1px solid #a6a096;padding:12px 0}.steps li{line-height:1.65}
+.step-number{border:1.5px solid var(--ink);border-radius:6px;color:var(--ink);background:var(--yellow);box-shadow:1px 2px 0 var(--ink);font-weight:750}
+.detail-actions{background:var(--paper);padding-top:12px;border-top:2px solid var(--ink)}
+.secondary-button,.detail-actions .primary-button,.brew-actions button,.timer-button{border:2px solid var(--ink);border-radius:7px;box-shadow:2px 3px 0 var(--ink);font-weight:750;color:var(--ink)}
+.secondary-button{background:var(--cyan)}.detail-actions .primary-button{background:var(--yellow);color:var(--ink);border-color:var(--ink)}
+.brew-head{border-bottom:2px solid var(--ink);padding-bottom:16px}.brew-head strong{font-weight:750}.brew-head>span{background:var(--lime);padding:4px 10px;border:1.5px solid var(--ink);border-radius:5px}
+.progress{height:6px;background:#ded6cb}.progress span{background:var(--cyan)}
+.brew-symbol{background:var(--yellow);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.brew-main h2,.bar-mode .brew-main h2{font:750 28px/1.6 ui-rounded,system-ui,sans-serif}.brew-main p{color:#565650}
+.timer{display:table;margin:25px auto 18px;border:2px solid var(--ink);padding:13px 20px;border-radius:9px;background:var(--soft);box-shadow:4px 4px 0 var(--ink);color:var(--ink)}
+.timer-button{background:var(--cyan);color:var(--ink)}
+.brew-actions{border-top:2px solid var(--ink)}.brew-actions button:first-child{background:var(--soft);border:2px solid var(--ink)}.brew-actions button:last-child{background:var(--yellow);color:var(--ink);border:2px solid var(--ink)}
+.cost-summary{border:2px solid var(--ink);background:var(--lime);box-shadow:4px 4px 0 var(--ink);border-radius:10px}
+.cost-summary strong{color:var(--ink)}.cost-list{display:grid;gap:12px}.cost-row{border:2px solid var(--ink);border-radius:8px;padding:14px 12px;background:var(--soft);box-shadow:2px 3px 0 var(--ink)}
+.cost-row em{display:table;margin-left:auto;background:var(--yellow);padding:2px 5px;color:var(--ink);font-weight:650}.cost-row small{color:#565650;line-height:1.7}
+.toast{background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:8px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #166d9b;outline-offset:3px}
+@media(hover:hover){.recipe-card:hover{transform:translate(-1px,-1px);box-shadow:4px 5px 0 var(--ink)}}
+@media(max-width:560px){body{background:var(--paper)}.app-shell{margin:0;min-height:100dvh;border:0;border-radius:0;box-shadow:none}.bottom-nav{bottom:calc(10px + env(safe-area-inset-bottom))}}
+@media(max-width:360px){.topbar h1{font-size:23px}.signature{padding:16px 12px}.signature h2{font-size:21px}.signature button{padding:10px}.recipe-card{gap:8px;padding:12px 9px}.nav-item{padding:3px 12px}.tools-row{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.recipe-card{transition:none}}
