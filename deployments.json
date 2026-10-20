@@ -1,0 +1,22 @@
+{
+  "github": {
+    "repository": "eakaluksengdeng-gif/slow-steady-coffee-",
+    "branch": "main"
+  },
+  "supabase": {
+    "project_id": "bczywekmsohnymjbadfi",
+    "organization_id": "ayzisdeqoylvcwhnhikg",
+    "url": "https://bczywekmsohnymjbadfi.supabase.co"
+  },
+  "render": {
+    "service_id": "srv-dbbi73jrjlhs73ebq5h0",
+    "workspace_id": "tea-db43qp4s728c739f479g",
+    "url": "https://coffee-gf3d.onrender.com"
+  },
+  "vercel": {
+    "team_id": "team_sjb9RWnp9hW8Ci0wBaoSHnzl",
+    "project_id": "prj_OjOg7hFLVkUhvv1zUTkVAtMkMAMb",
+    "url": "https://coffee-psi-plum.vercel.app",
+    "status": "production ready; GitHub connected"
+  }
+}

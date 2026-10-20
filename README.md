@@ -1,5 +1,13 @@
 # Slow & Steady Coffee
 
+Live web app (Vercel): https://coffee-psi-plum.vercel.app
+
+Alternative host (Render): https://coffee-gf3d.onrender.com
+
+Supabase project: `coffee` (`bczywekmsohnymjbadfi`), Singapore. The database schema is installed and tested for saves, version conflicts, account isolation and anonymous access denial. Deployment identifiers are in `deployments.json`.
+
+First-time account setup: in Supabase Authentication > URL Configuration, set Site URL to `https://coffee-psi-plum.vercel.app` (or the Render URL) and allow both hosted URLs as redirects. Email confirmation stays enabled. Never put passwords or service-role keys into this repository.
+
 Mobile coffee recipe app with editable recipes, costing, brewing timer, photos, backup/import and private online cookbooks. Vercel and Render use the same Supabase project; log in with the same account on each host.
 
 ## Run locally
