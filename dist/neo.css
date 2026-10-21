@@ -133,6 +133,9 @@ body{background-image:none}
 .detail-body{width:100%;max-width:1120px;margin:0 auto;padding-left:clamp(16px,3vw,40px);padding-right:clamp(16px,3vw,40px)}
 .detail-actions{width:100%;gap:14px;padding-left:clamp(16px,3vw,40px);padding-right:clamp(16px,3vw,40px)}
 .detail-actions button,.brew-actions button{min-width:0;white-space:normal}
+.detail-actions{grid-template-columns:1fr 1.4fr .8fr}
+.detail-actions .shared-delete-button{border:2px solid var(--ink);border-radius:7px;box-shadow:2px 3px 0 var(--ink);background:#f3b6a6;color:var(--ink);font:inherit;font-weight:750;padding:12px;min-height:48px}
+@media(max-width:600px){.detail-actions{grid-template-columns:1fr 1fr;gap:10px}.detail-actions .shared-delete-button{grid-column:1/-1}.detail-body{padding-bottom:195px}.detail-actions{margin-top:-160px}}
 .brew-main{max-width:1120px;margin:0 auto}
 .bar-mode .brew-main{min-height:calc(100dvh - 170px)}
 .brew-actions{gap:14px}

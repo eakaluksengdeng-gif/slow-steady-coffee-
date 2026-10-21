@@ -1,4 +1,4 @@
-/* No-login shared cookbook: append recipes, never overwrite another's recipe. */
+/* No-login shared cookbook: append and publicly delete, but never overwrite. */
 (()=>{
   const CACHE='coffee-shared-cache-v1',OUTBOX='coffee-shared-outbox-v1';
   const codec=window.CoffeeRecipe;
@@ -6,7 +6,7 @@
   let db=null,busy=false,pulling=false,timer=null;
   const bar=document.createElement('div');bar.className='cloud-bar';bar.innerHTML='<span id="syncState" role="status">กำลังโหลดสูตรส่วนกลาง…</span><button id="sharedSync">ซิงก์สูตร</button>';
   $('.topbar').after(bar);
-  const note=document.createElement('p');note.className='shared-note';note.textContent='ไม่ต้องล็อกอิน · ทุกคนที่มีลิงก์เห็นสูตรที่เพิ่ม · ปรับสูตรโดยบันทึกเป็นสูตรใหม่';bar.after(note);
+  const note=document.createElement('p');note.className='shared-note';note.textContent='ไม่ต้องล็อกอิน · ทุกคนที่มีลิงก์เพิ่มและลบสูตรส่วนกลางได้ · ปรับสูตรโดยบันทึกเป็นสูตรใหม่';bar.after(note);
   $('#recipesTitle').textContent='สูตรส่วนกลาง';
   $('#backupDialog .sheet-body>p').textContent='สำรองสูตรส่วนกลางได้ทุกเมื่อ สูตรที่นำเข้าจะเพิ่มให้ทุกคนที่มีลิงก์เห็น โดยเก็บสูตรเดิมไว้';
   const status=(text,state='')=>{bar.dataset.state=state;$('#syncState').textContent=text};
@@ -18,7 +18,22 @@
   display();
   const edit=openForm,detail=showDetail;
   openForm=function(id){edit(id);if(id){$('#recipeId').value='';$('#name').value+=' (ปรับสูตร)';$('#formTitle').textContent='ปรับสูตรและบันทึกเป็นสูตรใหม่'}else{$('#category').value='Espresso';$('#serve').value='ร้อน'}$('#deleteRecipe').hidden=true};
-  showDetail=function(id){detail(id);$$('#detailContent [data-edit]').forEach(b=>b.textContent='ปรับเป็นสูตรใหม่')};
+  showDetail=function(id){detail(id);$$('#detailContent [data-edit]').forEach(b=>b.textContent='ปรับเป็นสูตรใหม่');if(!current||current.id!==id)return;const button=document.createElement('button');button.type='button';button.className='shared-delete-button';button.textContent='ลบสูตร';button.onclick=()=>removeShared(id,button);$('#detailContent .detail-actions').append(button)};
+  async function removeShared(id,button){
+    const recipe=recipes.find(r=>r.id===id);if(!recipe)return;
+    if(busy||pulling)return toast('กำลังซิงก์สูตร กรุณาลองอีกครั้ง');
+    if(!db||!navigator.onLine)return toast('ต้องเชื่อมต่ออินเทอร์เน็ตก่อนลบสูตรส่วนกลาง');
+    if(!window.confirm(`ลบสูตร “${recipe.name}” ออกจากส่วนกลาง?\nทุกคนจะไม่เห็นสูตรนี้หลังซิงก์ และย้อนกลับไม่ได้\nแนะนำสำรองสูตรก่อนลบ`))return;
+    busy=true;button.disabled=true;button.textContent='กำลังลบ…';
+    try{
+      const {error}=await db.from('coffee_shared_recipes').delete().eq('id',id).select('id');
+      if(error)throw error;
+      remote.delete(id);pending.delete(id);persist();display();
+      if(current?.id===id)$('#detailDialog').close();
+      status('ลบสูตรส่วนกลางแล้ว · ทุกเครื่องจะอัปเดตเมื่อซิงก์','saved');toast('ลบสูตรส่วนกลางแล้ว');
+    }catch{toast('ลบไม่สำเร็จ กรุณาซิงก์แล้วลองใหม่');button.disabled=false;button.textContent='ลบสูตร'}
+    finally{busy=false}
+  }
   document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.id==='deleteRecipe'){e.preventDefault();e.stopImmediatePropagation();toast('สูตรส่วนกลางเก็บต้นฉบับไว้ ปรับเป็นสูตรใหม่ได้');}
     if(b.id==='duplicateRecipe'){e.preventDefault();e.stopImmediatePropagation();const id=current?.id;$('#detailDialog').close();openForm(id);$('#formTitle').textContent='คัดลอกเป็นสูตรใหม่';}
@@ -61,7 +76,7 @@
         if(data.length<250)break;
       }
       remote.clear();for(const [id,r] of loaded)remote.set(id,r);
-      persist();display();if(!pending.size)status('สูตรส่วนกลางพร้อมใช้ ✓ ไม่ต้องล็อกอิน','saved');
+      persist();display();if(current&&!remote.has(current.id)&&!pending.has(current.id)&&$('#detailDialog').open){$('#detailDialog').close();toast('สูตรนี้ถูกลบออกจากส่วนกลางแล้ว')}if(!pending.size)status('สูตรส่วนกลางพร้อมใช้ ✓ ไม่ต้องล็อกอิน','saved');
     }catch{status('โหลดออนไลน์ไม่ได้ · ลองซิงก์อีกครั้ง สูตรรอส่งยังอยู่ในเครื่อง','error')}
     finally{pulling=false}
   }
