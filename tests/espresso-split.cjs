@@ -7,6 +7,8 @@ for(const width of [320,390,768,1440]){
  await page.locator('.recipe-card').first().waitFor();
  await page.evaluate(()=>{const r=recipes[0];r.dose=18;r.yield=38;r.shotTime='35-40';showDetail(r.id)});
  await page.locator('.espresso-pair').waitFor();assert.equal(await page.locator('.spec-grid>.spec').count(),4);
+ assert.ok((await page.locator('.spec-grid').boundingBox()).width<=801,'spec section too wide');
+ const first=await page.locator('.spec').nth(0).boundingBox(),time=await page.locator('.spec').nth(1).boundingBox();assert.ok(first.height<=120,'espresso too tall');assert.ok(time.height<=85,'time card too tall');
  assert.deepEqual(await page.locator('.espresso-pair strong').allTextContents(),['18 g','38 g']);
  assert.ok((await page.locator('.spec').nth(1).textContent()).includes('35-40'));
  for(const el of await page.locator('.espresso-split,.espresso-pair>div').all())assert.ok(await el.evaluate(e=>e.scrollWidth<=e.clientWidth+2),'overflow');
