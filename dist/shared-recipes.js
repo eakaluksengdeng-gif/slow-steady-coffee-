@@ -1,5 +1,13 @@
 /* Normalize all public input before it reaches the existing recipe UI. */
 window.CoffeeRecipe={
+  duration(value){
+    const text=String(value??'').trim().replace(/[–—]/g,'-');
+    if(!text)return 0;if(text==='-')return '-';
+    if(!/^\d+(?:\.\d+)?(?:\s*-\s*\d+(?:\.\d+)?)?$/.test(text))throw Error('เวลาให้ใส่เช่น 35 หรือ 35-40 วินาที');
+    const values=text.split('-').map(Number);
+    if(values.some(n=>!Number.isFinite(n)||n>10000000)||values.length===2&&values[0]>values[1])throw Error('ช่วงเวลาต้องเรียงจากน้อยไปมาก เช่น 35-40');
+    return values.length===1?values[0]:values.join('-');
+  },
   uuid(value){return typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)},
   normalize(raw,id){
     if(!raw||typeof raw!=='object'||!this.uuid(id))throw Error('ข้อมูลสูตรไม่ถูกต้อง');
@@ -8,7 +16,8 @@ window.CoffeeRecipe={
     const array=v=>Array.isArray(v)?v.slice(0,100):[];
     const r={id,name:text(raw.name).trim(),category:['Espresso','นม','Slow Bar','Signature'].includes(raw.category)?raw.category:'Signature',serve:raw.serve==='เย็น'?'เย็น':'ร้อน',size:text(raw.size,40),notes:text(raw.notes,4000),beanName:text(raw.beanName),roast:text(raw.roast),grind:text(raw.grind),temperature:text(num(raw.temperature),20),costMode:raw.costMode==='ingredients'?'ingredients':'manual'};
     if(!r.name)throw Error('กรุณาระบุชื่อสูตร');
-    for(const k of ['price','cost','dose','yield','shotTime','packaging'])r[k]=num(raw[k]);
+    for(const k of ['price','cost','dose','yield','packaging'])r[k]=num(raw[k]);
+    r.shotTime=this.duration(raw.shotTime);
     r.ingredients=array(raw.ingredients).map(i=>({name:text(i?.name),amount:text(i?.amount,80),packPrice:i?.packPrice==null?null:num(i.packPrice),packQty:num(i?.packQty)}));
     r.steps=array(raw.steps).map(s=>({text:text(s?.text,2000),time:num(s?.time)}));
     r.variants=array(raw.variants).map(v=>({label:text(v?.label),size:text(v?.size,40),ingredients:array(v?.ingredients).map(i=>({name:text(i?.name),qty:num(i?.qty),unit:text(i?.unit,30)}))}));

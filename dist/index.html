@@ -52,7 +52,7 @@
         <div class="form-grid"><label>ประเภท<select id="category"><option>Espresso</option><option>นม</option><option>Slow Bar</option><option>Signature</option></select></label><label>เสิร์ฟ<select id="serve"><option>ร้อน</option><option>เย็น</option></select></label></div>
         <div class="form-grid"><label>ขนาดแก้ว<input id="size" placeholder="เช่น 16 oz"></label><label>ราคาขาย (บาท)<input id="price" type="number" min="0" step="0.01"></label></div>
         <h3>Espresso</h3>
-        <div class="form-grid three"><label>กาแฟ (g)<input id="dose" type="number" min="0" step="0.1"></label><label>ช็อต (g)<input id="yield" type="number" min="0" step="0.1"></label><label>เวลา (วินาที)<input id="shotTime" type="number" min="0"></label></div>
+        <div class="form-grid three"><label>กาแฟ (g)<input id="dose" type="number" min="0" step="0.1"></label><label>ช็อต (g)<input id="yield" type="number" min="0" step="0.1"></label><label>เวลา (วินาที)<input id="shotTime" type="text" maxlength="40" placeholder="เช่น 35-40" aria-describedby="shotTimeHint"><small id="shotTimeHint">ระบุเวลาเดียว ช่วงเวลา หรือ -</small></label></div>
         <h3>วัตถุดิบ</h3>
         <div id="ingredientRows"></div><button type="button" class="outline-button" id="addIngredient">＋ เพิ่มวัตถุดิบ</button>
         <h3>ขั้นตอนการทำ</h3>
@@ -69,10 +69,10 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
   <script src="photo-crop.js"></script>
-  <script src="enhancements.js?v=photo-crop-1"></script>
+  <script src="enhancements.js?v=time-range-1"></script>
   <script src="cloud-config.js"></script>
   <script src="vendor/supabase.js"></script>
-  <script src="shared-recipes.js"></script>
+  <script src="shared-recipes.js?v=time-range-1"></script>
   <script src="shared-cloud.js?v=edit-in-place-1"></script>
   <script src="recipe-checklist.js?v=ingredient-card-1"></script>
 </body>
