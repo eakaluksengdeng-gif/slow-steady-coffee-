@@ -25,6 +25,19 @@
 .ingredients.ingredient-card>li>strong{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;overflow-wrap:anywhere;max-width:230px}
 @media(max-width:450px){.ingredients.ingredient-card{padding:0 14px}.ingredients.ingredient-card>li{font-size:16px;gap:12px;padding:12px 0}.ingredients.ingredient-card>li>strong{font-size:20px;max-width:115px}}
 html{background:#ffd126}
+.sheet-body #photoPreview{display:block;width:160px;height:160px;max-width:100%;max-height:none;object-fit:contain;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+.sheet-body #photoPreview[hidden]{display:none}
+.recipe-card:has(.has-photo){grid-template-columns:72px minmax(0,1fr) auto}
+.recipe-icon.has-photo{width:72px;height:72px;border-radius:10px;background:var(--soft)}
+.recipe-icon.has-photo img{object-fit:contain;border-radius:0}
+.detail-icon:has(.hero-photo){width:150px;height:150px;border-radius:14px;overflow:hidden;background:var(--soft)}
+.detail-icon .hero-photo{object-fit:contain;border-radius:0}
+.photo-crop-dialog{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:20px;border:2px solid var(--ink);border-radius:18px;background:var(--paper);color:var(--ink);overflow:auto;box-sizing:border-box;color-scheme:only light}
+.photo-crop-dialog h2{font-size:21px;margin:0 0 6px}.photo-crop-dialog p{font-size:13px;margin:0 0 14px}
+.photo-crop-dialog canvas{display:block;width:min(100%,300px);height:auto;aspect-ratio:1;margin:0 auto 16px;border:2px solid var(--ink);border-radius:8px;touch-action:none;cursor:move;box-sizing:border-box}
+.photo-crop-dialog label{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:15px}.photo-crop-dialog input{width:100%;min-height:40px;accent-color:var(--ink)}
+.photo-crop-dialog button{font:inherit;min-height:44px;padding:9px 13px;border:2px solid var(--ink);border-radius:8px;background:var(--soft);color:var(--ink)}
+.crop-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:18px}.crop-actions .crop-confirm{background:var(--yellow)}
 body{font-family:ui-rounded,"Thonburi","Noto Sans Thai",system-ui,sans-serif;background-color:#ffd126;background-image:radial-gradient(#726b44 1px,transparent 1px);background-size:18px 18px}
 .paper-noise{display:none}
 .app-shell{background:var(--paper);box-shadow:6px 7px 0 var(--ink);border:2px solid var(--ink);border-radius:28px;min-height:calc(100dvh - 36px);margin:18px auto;padding-top:25px;padding-bottom:125px}
