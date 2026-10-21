@@ -23,7 +23,9 @@ const {chromium}=require(process.env.COFFEE_PLAYWRIGHT||'playwright');
         assert.ok(b.body.top>=b.header.bottom-1,'form body overlaps header');
         assert.ok(b.scrollWidth<=width+1,'horizontal overflow');
       }
-      await check();await page.locator('#recipeForm .sheet-body').evaluate(e=>e.scrollTop=260);await check();
+      await check();
+      for(const button of await page.locator('#recipeForm .sheet-head button').all())assert.equal(await button.evaluate(e=>getComputedStyle(e).borderTopStyle),'solid','header action missing frame');
+      await page.locator('#recipeForm .sheet-body').evaluate(e=>e.scrollTop=260);await check();
       await page.locator('#recipeForm .sheet-body').evaluate(e=>e.scrollTop=e.scrollHeight);
       await page.locator('#notes').fill('ทดสอบเลื่อนฟอร์ม');await check();
       if(width===360)await page.screenshot({path:'/Users/eakaluksengdeng/Downloads/coffee-mobile-editor-fixed.png',animations:'disabled'});
