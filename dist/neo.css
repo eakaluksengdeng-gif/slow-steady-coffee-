@@ -2,6 +2,10 @@
 :root{--paper:#fff3e9;--ink:#21211f;--olive:#ffe100;--gold:#21211f;--line:#35352f;--soft:#fff9f2;--danger:#ac302b;--yellow:#ffe100;--cyan:#75d2df;--lime:#e4f462;--shadow:4px 5px 0 #21211f}
 /* Keep the designed palette even when the device prefers dark mode. */
 :root{color-scheme:only light}
+.ingredient-cost-hint,.cost-calculation-hint{font-size:13px;line-height:1.6;margin:10px 0 0;color:var(--ink);font-weight:500}
+.cost-calculation-hint{padding:10px 12px;border:1px solid #b5ab9c;border-radius:8px;background:var(--soft)}
+.cost-calculation-hint[data-complete=true]{background:var(--lime)}
+#cost[readonly]{background:var(--soft);font-weight:750;border-color:var(--ink)}
 /* Readable, local-only ingredient checks on the recipe itself. */
 .checklist-toolbar{max-width:680px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;scroll-margin-top:90px}
 .checklist-toolbar>span{font-size:14px}
