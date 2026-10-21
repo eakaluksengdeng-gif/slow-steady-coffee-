@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const {chromium}=require(process.env.COFFEE_PLAYWRIGHT||'playwright');
+(async()=>{const browser=await chromium.launch({channel:'chrome',headless:true});let page,api,headers,id,copyId;try{
+ const context=await browser.newContext();if(!process.env.COFFEE_LIVE_ONLY)await context.route('**/shared-cloud.js*',r=>r.fulfill({contentType:'application/javascript',body:fs.readFileSync('dist/shared-cloud.js','utf8')}));
+ page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('https://coffee-gf3d.onrender.com/?v=edit-in-place-1');
+ const cfg=await page.evaluate(()=>COFFEE_CONFIG);api=cfg.url+'/rest/v1/coffee_shared_recipes';headers={apikey:cfg.key,'Content-Type':'application/json'};id=await page.evaluate(()=>crypto.randomUUID());
+ const name='ทดสอบแก้ทับ '+id;const payload=await page.evaluate(({id,name})=>CoffeeRecipe.normalize({id,name,ingredients:[{name:'นม',amount:'120 ml'}],steps:[{text:'ผสม',time:0}]},id),{id,name});
+ assert.equal((await page.request.post(api,{headers,data:{id,payload}})).status(),201);await page.reload();const selector=`.recipe-card[data-id="${id}"]`;await page.locator(selector).click();await page.locator('[data-edit]').first().click();assert.equal(await page.locator('#recipeId').inputValue(),id);assert.equal(await page.locator('#name').inputValue(),name);
+ await page.locator('#name').fill(name+' แก้แล้ว');await page.locator('.ing-amount').first().fill('150 ml');await page.locator('#recipeForm button[value=save]').click();
+ await page.waitForFunction(()=>document.querySelector('#syncState').textContent.includes('บันทึกส่วนกลางแล้ว'));
+ let rows=await (await page.request.get(api+'?id=eq.'+id+'&select=id,payload',{headers})).json();assert.equal(rows.length,1);assert.equal(rows[0].payload.ingredients[0].amount,'150 ml');assert.equal(rows[0].payload.name,name+' แก้แล้ว');
+ await page.locator(selector).click();await page.locator('#duplicateRecipe').click();assert.equal(await page.locator('#recipeId').inputValue(),'');await page.locator('#name').fill(name+' สำเนา');await page.locator('#recipeForm button[value=save]').click();await page.waitForFunction(()=>document.querySelector('#syncState').textContent.includes('บันทึกส่วนกลางแล้ว'));
+ copyId=await page.locator('.recipe-card').filter({hasText:name+' สำเนา'}).getAttribute('data-id');assert.notEqual(copyId,id);
+ await page.locator(selector).click();await page.locator('[data-edit]').first().click();await context.setOffline(true);await page.locator('#notes').fill('แก้ออฟไลน์');await page.locator('#recipeForm button[value=save]').click();assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('coffee-shared-edits-v1'))[0].notes),'แก้ออฟไลน์');await context.setOffline(false);await page.reload();
+ await page.waitForFunction(()=>JSON.parse(localStorage.getItem('coffee-shared-edits-v1')||'[]').length===0);
+ rows=await (await page.request.get(api+'?id=eq.'+id+'&select=payload',{headers})).json();assert.equal(rows[0].payload.notes,'แก้ออฟไลน์');assert.deepEqual(errors,[]);console.log('PASS: same UUID overwrite, ingredients/name, explicit copy new UUID, offline edit/reload/retry');
+}finally{if(api&&headers&&page){for(const value of [id,copyId].filter(Boolean))await page.request.delete(api+'?id=eq.'+value,{headers})}await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
