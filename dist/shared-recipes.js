@@ -18,6 +18,7 @@ window.CoffeeRecipe={
     if(!r.name)throw Error('กรุณาระบุชื่อสูตร');
     for(const k of ['price','cost','dose','yield','packaging'])r[k]=num(raw[k]);
     r.shotTime=this.duration(raw.shotTime);
+    r.gpRate=raw.gpRate==null||raw.gpRate===''?null:Math.min(100,num(raw.gpRate));
     r.ingredients=array(raw.ingredients).map(i=>({name:text(i?.name),amount:text(i?.amount,80),packPrice:i?.packPrice==null?null:num(i.packPrice),packQty:num(i?.packQty)}));
     r.steps=array(raw.steps).map(s=>({text:text(s?.text,2000),time:num(s?.time)}));
     r.variants=array(raw.variants).map(v=>({label:text(v?.label),size:text(v?.size,40),ingredients:array(v?.ingredients).map(i=>({name:text(i?.name),qty:num(i?.qty),unit:text(i?.unit,30)}))}));

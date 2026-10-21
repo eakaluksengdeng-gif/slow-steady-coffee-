@@ -7,11 +7,12 @@
     const grid=document.querySelector('#detailContent .spec-grid');
     if(grid){
       const profit=document.createElement('div');profit.className='spec profit-spec';
-      const label=document.createElement('small');label.textContent='กำไรขั้นต้น / แก้ว';
-      const amount=document.createElement('strong'),value=Number(current.price||0)-Number(current.cost||0);
+      const gp=window.CoffeeGP?CoffeeGP.totals(current):{rate:0,fee:0,profit:Number(current.price||0)-Number(current.cost||0)};
+      const label=document.createElement('small');label.textContent=gp.rate?'กำไรหลัง GP / แก้ว':'กำไรขั้นต้น / แก้ว';
+      const amount=document.createElement('strong'),value=gp.profit;
       amount.textContent=value.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' บาท';
       if(value<0)profit.classList.add('is-loss');profit.append(label,amount);grid.append(profit);
-      const note=document.createElement('p');note.className='profit-note';note.textContent='กำไรขั้นต้น = ราคาขาย − ต้นทุนต่อแก้ว · ยังไม่หักค่าใช้จ่ายอื่นของร้าน';grid.after(note);
+      const note=document.createElement('p');note.className='profit-note';note.textContent=gp.rate?`หัก GP ${gp.rate}% = ${gp.fee.toFixed(2)} บาทจากราคาขาย · กำไรหลัง GP = ราคาขาย − ต้นทุน − GP · ยังไม่หักค่าใช้จ่ายอื่นของร้าน`:'กำไรขั้นต้น = ราคาขาย − ต้นทุนต่อแก้ว · ยังไม่หักค่าใช้จ่ายอื่นของร้าน';grid.after(note);
     }
     const espresso=document.querySelector('#detailContent .spec-grid .spec');
     if(espresso){
