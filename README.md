@@ -4,23 +4,23 @@ Live web app (Vercel): https://coffee-psi-plum.vercel.app
 
 Alternative host (Render): https://coffee-gf3d.onrender.com
 
-Supabase project: `coffee` (`bczywekmsohnymjbadfi`), Singapore. The database schema is installed and tested for saves, version conflicts, account isolation and anonymous access denial. Deployment identifiers are in `deployments.json`.
+Supabase project: `coffee` (`bczywekmsohnymjbadfi`), Singapore. Deployment identifiers are in `deployments.json`.
 
-First-time account setup: in Supabase Authentication > URL Configuration, set Site URL to `https://coffee-psi-plum.vercel.app` (or the Render URL) and allow both hosted URLs as redirects. Email confirmation stays enabled. Never put passwords or service-role keys into this repository.
+The current app is a shared cookbook: no signup, login or email confirmation is needed. Anyone with a link can read, add, export and use recipes. Adjusting a published recipe creates a new recipe and keeps the original. Public clients cannot overwrite or delete published recipes. Never put passwords or service-role keys into this repository.
 
-Mobile coffee recipe app with editable recipes, costing, brewing timer, photos, backup/import and private online cookbooks. Vercel and Render use the same Supabase project; log in with the same account on each host.
+Mobile coffee recipe app with recipe versions, costing, brewing timer, photos and backup/import. Vercel and Render share the same public recipe table.
 
 ## Run locally
 
 Use Node.js 22 or newer. Run `npm ci`, set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, then run `npm run build`. Serve `dist/` with any static server. The public publishable key is intended for browser use; never configure a service-role key.
 
-## Database and login
+## Shared database
 
-Run `database/coffee-schema.sql` once in the chosen Supabase project's SQL Editor. It creates an account-owned cookbook with Row Level Security and a revision-checked save function. Each cookbook includes recipe photos as compressed data URLs. No real recipes or account passwords are included in this repository.
+Run `database/shared-recipes.sql` once in a new project's SQL Editor. It creates `coffee_shared_recipes` with public SELECT and column-scoped INSERT permissions and RLS. UPDATE and DELETE are not granted. The public-access policies are intentional. Recipe photos are compressed data URLs in the recipe payload. New rows use UUIDs for retry-safe publishing.
 
-Email/password registration uses Supabase Auth. Keep email confirmation enabled. Add your Vercel and Render URLs to Supabase Auth's allowed redirect URLs, set the primary Site URL, and configure your email provider for production use. Users create their own password inside the app.
+The previous private `coffee_books` table, auth settings and private caches remain separate and protected. No private recipes are automatically copied into the shared table. To deliberately publish an old local or APK recipe, export a JSON backup and import it using the shared app's backup dialog.
 
-On sign-in, the app loads only that account's cookbook. Existing local recipes remain separate until the user chooses “นำสูตรเดิมในเครื่องขึ้นบัญชีนี้”. Offline changes are queued under that account and retried when the connection returns. A stale revision is rejected instead of overwriting another device. “โหลดจากออนไลน์” saves a local recovery copy and downloads a backup before replacing conflicting edits. The app polls every 20 seconds while visible and syncs when brought to the foreground.
+Offline additions are stored in a separate outbox and retried when online. A duplicate UUID after an uncertain network response is checked against the existing recipe before treating it as success. Public content is normalized before rendering. Visible tabs poll every 15 seconds; “ซิงก์สูตร” refreshes immediately. Old `cloud.js` is retained as the previous private-account implementation and is not loaded by the shared web app.
 
 ## Vercel
 
@@ -32,7 +32,7 @@ Create a Static Site from this repository in the selected workspace. Build comma
 
 ## Tests
 
-Install `jsdom` in a separate test environment and set `COFFEE_TEST_JSDOM` to its package path. Run `node tests/store-flows.cjs` for recipe edit/cost/backup flows and `node tests/cloud-flows.cjs` for cloud save/conflict/account isolation using a controlled mock. Database RLS and live signup/login need integration checks against the provisioned Supabase project before calling online storage verified.
+Install Playwright in a separate test environment and set `COFFEE_PLAYWRIGHT` to its package path. Run `node tests/shared-browser.cjs <origin>` for no-login publishing, cross-browser reads, immutable originals, private-cache isolation and offline retry. It prints test UUIDs; remove only those fixtures via an administrative connection after the test. Run `node tests/fullscreen-layout.cjs <origin>` for responsive layout checks. `tests/cloud-flows.cjs` covers the previous private mode only.
 
 ## Android
 
