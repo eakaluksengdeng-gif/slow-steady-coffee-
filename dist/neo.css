@@ -1,5 +1,7 @@
 /* Coffee Club — cream paper, ink outlines, offset shadows. */
 :root{--paper:#fff3e9;--ink:#21211f;--olive:#ffe100;--gold:#21211f;--line:#35352f;--soft:#fff9f2;--danger:#ac302b;--yellow:#ffe100;--cyan:#75d2df;--lime:#e4f462;--shadow:4px 5px 0 #21211f}
+/* Keep the designed palette even when the device prefers dark mode. */
+:root{color-scheme:only light}
 html{background:#ffd126}
 body{font-family:ui-rounded,"Thonburi","Noto Sans Thai",system-ui,sans-serif;background-color:#ffd126;background-image:radial-gradient(#726b44 1px,transparent 1px);background-size:18px 18px}
 .paper-noise{display:none}
