@@ -17,6 +17,13 @@
 .ingredient-tile[aria-pressed=true]{background:#eee8df;border-color:#9b948a;color:#686158}
 .ingredient-tile[aria-pressed=true] .ingredient-check{background:var(--lime);color:var(--ink)}
 @media(max-width:450px){.ingredient-tile{padding:14px 12px;gap:12px}.ingredient-content{align-items:flex-start;flex-direction:column;gap:4px}.ingredient-amount{max-width:100%;text-align:left}}
+/* Compact, non-interactive ingredient card replaces individual check tiles. */
+.ingredients.ingredient-card{max-width:600px;margin:0 auto 28px;padding:0 18px;list-style:none;border:1.5px solid var(--ink);border-radius:12px;background:var(--soft);scroll-margin-top:90px}
+.ingredients.ingredient-card>li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);align-items:center;gap:18px;padding:13px 0;min-height:54px;border:0;border-bottom:1px solid #d2c8bc;font-size:17px;line-height:1.5}
+.ingredients.ingredient-card>li:last-child{border-bottom:0}
+.ingredients.ingredient-card>li>span{min-width:0;overflow-wrap:anywhere}
+.ingredients.ingredient-card>li>strong{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;overflow-wrap:anywhere;max-width:230px}
+@media(max-width:450px){.ingredients.ingredient-card{padding:0 14px}.ingredients.ingredient-card>li{font-size:16px;gap:12px;padding:12px 0}.ingredients.ingredient-card>li>strong{font-size:20px;max-width:115px}}
 html{background:#ffd126}
 body{font-family:ui-rounded,"Thonburi","Noto Sans Thai",system-ui,sans-serif;background-color:#ffd126;background-image:radial-gradient(#726b44 1px,transparent 1px);background-size:18px 18px}
 .paper-noise{display:none}
